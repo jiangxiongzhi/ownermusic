@@ -1,86 +1,16 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="referrer" content="no-referrer">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="Owner 音乐">
-  <title>Owner 音乐</title>
-  <style>
-    :root { color-scheme: dark; }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font: 16px/1.45 system-ui, sans-serif;
-      background: #101114;
-      color: #f4f1ea;
-    }
-    main { max-width: 40rem; margin: 0 auto; padding: 1.25rem 1rem 6rem; }
-    h1 { font-size: 1.35rem; margin: 0 0 0.4rem; }
-    p { margin: 0.35rem 0; color: #c8c2b4; }
-    button, .chip {
-      font: inherit;
-      border: 0;
-      border-radius: 999px;
-      padding: 0.45rem 0.9rem;
-      background: #2a2d34;
-      color: #f4f1ea;
-    }
-    button.primary { background: #f4f1ea; color: #101114; }
-    .row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.75rem 0; }
-    #now {
-      margin: 0.8rem 0 1rem;
-      padding: 0.9rem;
-      background: #1c1e24;
-      border-radius: 14px;
-    }
-    #title { font-size: 1.15rem; }
-    #artist, #time, #lyric { color: #c8c2b4; font-size: 0.92rem; }
-    #lyric { min-height: 1.4em; margin: 0.6rem 0; color: #f4f1ea; }
-    input[type="range"] { width: 100%; }
-    ul { list-style: none; margin: 0; padding: 0; }
-    li {
-      display: flex;
-      gap: 0.6rem;
-      align-items: center;
-      padding: 0.7rem 0.1rem;
-      border-bottom: 1px solid #2a2d34;
-    }
-    li .meta { flex: 1; min-width: 0; }
-    li .name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    li .sub { color: #8d877a; font-size: 0.8rem; }
-    li.playing .name { color: #8dcb8a; }
-    .warn { color: #e2b657; }
-    #gate {
-      margin: 0.8rem 0;
-      padding: 0.9rem;
-      background: #1c1e24;
-      border-radius: 14px;
-    }
-  </style>
-</head>
-<body>
-  <main>
-    <h1>Owner 音乐</h1>
-    <p id="status">正在读取本机曲库…</p>
-    <div id="gate" hidden></div>
-    <section id="now" hidden>
-      <div id="title"></div>
-      <div id="artist"></div>
-      <div id="lyric"></div>
-      <input id="seek" type="range" min="0" max="1000" value="0">
-      <div id="time">0:00 / 0:00</div>
-      <div class="row">
-        <button id="prev" type="button">上一首</button>
-        <button id="toggle" class="primary" type="button">播放</button>
-        <button id="next" type="button">下一首</button>
-      </div>
-    </section>
-    <div id="filters" class="row"></div>
-    <ul id="list"></ul>
-  </main>
-  <audio id="audio" preload="none"></audio>
-  <script src="./app.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Owner 音乐" />
+    <title>Owner 音乐</title>
+    <script type="module" crossorigin src="/ownermusic/assets/index-Br7b375T.js"></script>
+    <link rel="stylesheet" crossorigin href="/ownermusic/assets/index-CuRhqCfB.css">
+  </head>
+  <body>
+    <div id="app"></div>
+  </body>
 </html>

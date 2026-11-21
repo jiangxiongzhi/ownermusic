@@ -1,23 +1,24 @@
-const CACHE = 'owner-music-shell-1';
-const SHELL = ['./index.html', './app.js', './sw.js'];
+const CACHE = 'owner-music-shell-2';
+const SHELL = ["./index.html","./assets/index-CuRhqCfB.css","./assets/index-Br7b375T.js"];
 
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE).then((cache) => cache.addAll(SHELL)).then(() => self.skipWaiting()),
-  );
+  event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(SHELL)).then(() => self.skipWaiting()));
 });
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(keys.filter((key) => key !== CACHE).map((key) => caches.delete(key))),
-    ).then(() => self.clients.claim()),
+    caches.keys().then((keys) => Promise.all(keys.filter((key) => key !== CACHE).map((key) => caches.delete(key)))).then(() => self.clients.claim()),
   );
 });
 
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
   if (url.origin !== self.location.origin || event.request.method !== 'GET') return;
+  if (url.pathname.endsWith('/sw.js')) return;
+  if (event.request.mode === 'navigate') {
+    event.respondWith(fetch(event.request).catch(() => caches.match('./index.html')));
+    return;
+  }
   event.respondWith(
     caches.match(event.request).then((hit) => {
       if (hit) return hit;
@@ -27,7 +28,7 @@ self.addEventListener('fetch', (event) => {
           caches.open(CACHE).then((cache) => cache.put(event.request, copy));
         }
         return response;
-      }).catch(() => caches.match('./index.html'));
+      });
     }),
   );
 });
