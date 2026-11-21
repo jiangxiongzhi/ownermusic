@@ -1,2 +1,2 @@
 # ownermusic
-hi all
+[welcome](https://jiangxiongzhi.github.io/ownermusic/)
