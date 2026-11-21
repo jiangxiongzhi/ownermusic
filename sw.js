@@ -1,5 +1,5 @@
-const CACHE = 'owner-music-shell-2';
-const SHELL = ["./index.html","./assets/index-CuRhqCfB.css","./assets/index-Br7b375T.js"];
+const CACHE = 'owner-music-shell-3';
+const SHELL = ["./index.html","./assets/index-CuRhqCfB.css","./assets/index-K08ALccA.js"];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(SHELL)).then(() => self.skipWaiting()));
@@ -16,7 +16,9 @@ self.addEventListener('fetch', (event) => {
   if (url.origin !== self.location.origin || event.request.method !== 'GET') return;
   if (url.pathname.endsWith('/sw.js')) return;
   if (event.request.mode === 'navigate') {
-    event.respondWith(fetch(event.request).catch(() => caches.match('./index.html')));
+    event.respondWith(
+      fetch(event.request).then((response) => (response.ok ? response : caches.match('./index.html'))).catch(() => caches.match('./index.html')),
+    );
     return;
   }
   event.respondWith(
