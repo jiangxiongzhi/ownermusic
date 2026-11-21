@@ -2,114 +2,85 @@
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Owner 音乐 · 页面测试</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="referrer" content="no-referrer">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Owner 音乐">
+  <title>Owner 音乐</title>
   <style>
-    :root { color-scheme: light dark; }
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
     body {
       margin: 0;
-      font: 16px/1.5 system-ui, sans-serif;
+      font: 16px/1.45 system-ui, sans-serif;
       background: #101114;
       color: #f4f1ea;
     }
-    main {
-      max-width: 36rem;
-      margin: 0 auto;
-      padding: 2.5rem 1.25rem 3rem;
-    }
-    h1 { font-size: 1.6rem; margin: 0 0 0.4rem; }
-    p { margin: 0.4rem 0; color: #c8c2b4; }
-    .ok { color: #8dcb8a; font-weight: 650; }
-    dl {
-      margin: 1.25rem 0;
-      padding: 0.9rem 1rem;
-      background: #1c1e24;
-      border-radius: 12px;
-    }
-    dt { color: #8d877a; font-size: 0.8rem; }
-    dd {
-      margin: 0 0 0.8rem;
-      word-break: break-all;
-    }
-    dd:last-child { margin-bottom: 0; }
-    button {
+    main { max-width: 40rem; margin: 0 auto; padding: 1.25rem 1rem 6rem; }
+    h1 { font-size: 1.35rem; margin: 0 0 0.4rem; }
+    p { margin: 0.35rem 0; color: #c8c2b4; }
+    button, .chip {
       font: inherit;
       border: 0;
       border-radius: 999px;
-      padding: 0.55rem 1rem;
-      background: #f4f1ea;
-      color: #101114;
+      padding: 0.45rem 0.9rem;
+      background: #2a2d34;
+      color: #f4f1ea;
+    }
+    button.primary { background: #f4f1ea; color: #101114; }
+    .row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.75rem 0; }
+    #now {
+      margin: 0.8rem 0 1rem;
+      padding: 0.9rem;
+      background: #1c1e24;
+      border-radius: 14px;
+    }
+    #title { font-size: 1.15rem; }
+    #artist, #time, #lyric { color: #c8c2b4; font-size: 0.92rem; }
+    #lyric { min-height: 1.4em; margin: 0.6rem 0; color: #f4f1ea; }
+    input[type="range"] { width: 100%; }
+    ul { list-style: none; margin: 0; padding: 0; }
+    li {
+      display: flex;
+      gap: 0.6rem;
+      align-items: center;
+      padding: 0.7rem 0.1rem;
+      border-bottom: 1px solid #2a2d34;
+    }
+    li .meta { flex: 1; min-width: 0; }
+    li .name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    li .sub { color: #8d877a; font-size: 0.8rem; }
+    li.playing .name { color: #8dcb8a; }
+    .warn { color: #e2b657; }
+    #gate {
+      margin: 0.8rem 0;
+      padding: 0.9rem;
+      background: #1c1e24;
+      border-radius: 14px;
     }
   </style>
 </head>
 <body>
   <main>
-    <h1>页面已经打开</h1>
-    <p class="ok">这是 Owner 音乐的网页测试，不是播放器。</p>
-    <p>能看到这段字，说明浏览器把页面渲染出来了。</p>
-    <dl>
-      <dt>当前地址</dt>
-      <dd id="url">读取中…</dd>
-      <dt>是否 HTTPS</dt>
-      <dd id="https">读取中…</dd>
-      <dt>打开时间</dt>
-      <dd id="when">读取中…</dd>
-      <dt>IndexedDB</dt>
-      <dd id="db">检测中…</dd>
-    </dl>
-    <button type="button" id="again">再测一次存储</button>
+    <h1>Owner 音乐</h1>
+    <p id="status">正在读取本机曲库…</p>
+    <div id="gate" hidden></div>
+    <section id="now" hidden>
+      <div id="title"></div>
+      <div id="artist"></div>
+      <div id="lyric"></div>
+      <input id="seek" type="range" min="0" max="1000" value="0">
+      <div id="time">0:00 / 0:00</div>
+      <div class="row">
+        <button id="prev" type="button">上一首</button>
+        <button id="toggle" class="primary" type="button">播放</button>
+        <button id="next" type="button">下一首</button>
+      </div>
+    </section>
+    <div id="filters" class="row"></div>
+    <ul id="list"></ul>
   </main>
-  <script>
-    var url = document.getElementById("url");
-    var https = document.getElementById("https");
-    var when = document.getElementById("when");
-    var db = document.getElementById("db");
-
-    url.textContent = location.href;
-    https.textContent = location.protocol === "https:" ? "是" : "否（" + location.protocol + "）";
-    when.textContent = new Date().toLocaleString();
-
-    function testDb() {
-      db.textContent = "检测中…";
-      if (!window.indexedDB) {
-        db.textContent = "这个浏览器没有 IndexedDB";
-        return;
-      }
-      var request = indexedDB.open("owner-music-test", 1);
-      request.onupgradeneeded = function () {
-        var database = request.result;
-        if (!database.objectStoreNames.contains("notes")) {
-          database.createObjectStore("notes");
-        }
-      };
-      request.onerror = function () {
-        db.textContent = "打开失败";
-      };
-      request.onsuccess = function () {
-        var database = request.result;
-        var tx = database.transaction("notes", "readwrite");
-        tx.objectStore("notes").put("ok", "ping");
-        tx.oncomplete = function () {
-          var read = database.transaction("notes", "readonly");
-          var get = read.objectStore("notes").get("ping");
-          get.onsuccess = function () {
-            db.textContent = get.result === "ok" ? "可以写入并读回" : "读回的内容不对";
-            database.close();
-          };
-          get.onerror = function () {
-            db.textContent = "写入后读回失败";
-            database.close();
-          };
-        };
-        tx.onerror = function () {
-          db.textContent = "写入失败";
-          database.close();
-        };
-      };
-    }
-
-    document.getElementById("again").addEventListener("click", testDb);
-    testDb();
-  </script>
+  <audio id="audio" preload="none"></audio>
+  <script src="./app.js"></script>
 </body>
 </html>
