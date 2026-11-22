@@ -1,5 +1,5 @@
-const CACHE = 'owner-music-shell-20';
-const SHELL = ["./index.html","./assets/index-CjBSh2Ic.css","./assets/index-U-KBSqRD.js"];
+const CACHE = 'owner-music-shell-21';
+const SHELL = ["./index.html","./assets/index-CjBSh2Ic.css","./assets/index-CLi1C54D.js"];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(SHELL)).then(() => self.skipWaiting()));
