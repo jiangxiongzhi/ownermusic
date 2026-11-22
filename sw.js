@@ -1,4 +1,4 @@
-const CACHE = 'owner-music-shell-36';
+const CACHE = 'owner-music-shell-37';
 const SHELL = ["./index.html","./assets/index-Cr5dbPmH.css","./assets/index-w4YNjnDb.js"];
 
 self.addEventListener('install', (event) => {
